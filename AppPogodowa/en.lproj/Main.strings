@@ -1,0 +1,24 @@
+
+/* Class = "UIButton"; normalTitle = "Poprzedni"; ObjectID = "N2D-kd-6W6"; */
+"N2D-kd-6W6.normalTitle" = "Poprzedni";
+
+/* Class = "UILabel"; text = "Stan pogody na "; ObjectID = "Xro-b2-4NB"; */
+"Xro-b2-4NB.text" = "Stan pogody na ";
+
+/* Class = "UILabel"; text = "Lukasz Stawowy"; ObjectID = "YRA-zh-VOi"; */
+"YRA-zh-VOi.text" = "Lukasz Stawowy";
+
+/* Class = "UITextView"; text = "Dzisiejsza data"; ObjectID = "Z9C-zE-t5y"; */
+"Z9C-zE-t5y.text" = "Dzisiejsza data";
+
+/* Class = "UILabel"; text = "Miasto"; ObjectID = "mGU-lv-nYp"; */
+"mGU-lv-nYp.text" = "Miasto";
+
+/* Class = "UIButton"; normalTitle = "Nastepny"; ObjectID = "mPq-tm-A2b"; */
+"mPq-tm-A2b.normalTitle" = "Nastepny";
+
+/* Class = "UITextField"; text = "Londyn"; ObjectID = "nmB-Oj-QKK"; */
+"nmB-Oj-QKK.text" = "Londyn";
+
+/* Class = "UIButton"; normalTitle = "Szukaj"; ObjectID = "tYD-SE-Rt5"; */
+"tYD-SE-Rt5.normalTitle" = "Szukaj";
