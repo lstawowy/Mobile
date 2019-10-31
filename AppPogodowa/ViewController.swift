@@ -8,24 +8,61 @@
 
 import UIKit
 
-extension UIImageView {
-    func load(url: URL) {
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.image = image
-                    }
-                }
-            }
-        }
-    }
-}
+//extension UIImageView {
+//    func load(url: URL) {
+//        DispatchQueue.global().async { [weak self] in
+//            if let data = try? Data(contentsOf: url) {
+//                if let image = UIImage(data: data) {
+//                    DispatchQueue.main.async {
+//                        self?.image = image
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 extension Double {
     func rounded(toPlaces places:Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor
+    }
+}
+
+//func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+//    URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+//}
+//
+//func downloadImage(from url: URL) {
+//    print("Download Started")
+//    getData(from: url) { data, response, error in
+//        guard let data = data, error == nil else { return }
+//        print(response?.suggestedFilename ?? url.lastPathComponent)
+//        print("Download Finished")
+//        DispatchQueue.main.async() {
+//            self.imageView.image = UIImage(data: data)
+//        }
+//    }
+//}
+
+extension UIImageView {
+    func downloaded(from url: URL, contentMode mode: UIViewContentMode = .scaleAspectFit) {  // for swift 4.2 syntax just use ===> mode: UIView.ContentMode
+        contentMode = mode
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard
+                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                let data = data, error == nil,
+                let image = UIImage(data: data)
+                else { return }
+            DispatchQueue.main.async() {
+                self.image = image
+            }
+            }.resume()
+    }
+    func downloaded(from link: String, contentMode mode: UIViewContentMode = .scaleAspectFit) {  // for swift 4.2 syntax just use ===> mode: UIView.ContentMode
+        guard let url = URL(string: link) else { return }
+        downloaded(from: url, contentMode: mode)
     }
 }
 
@@ -133,10 +170,11 @@ class ViewController: UIViewController {
         
         Pressure.text="\(weatherDay!["air_pressure"]!)"
         
-        let urlString = "https://www.metaweather.com/static/img/weather/\(weatherDay!["weather_state_abbr"]!).svg"
+        let urlString = "https://www.metaweather.com/static/img/weather/png/\(weatherDay!["weather_state_abbr"]!).png"
         print(urlString)
-        let url = URL(string: urlString)
-        Image.load(url: url!)
+//        Image.image = UIImage(named: "image")
+//        Image.load(url: url!)
+        self.Image.downloaded(from: urlString)
     }
     
     func getCurrentShortDate() -> Void {
