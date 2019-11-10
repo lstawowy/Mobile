@@ -8,20 +8,6 @@
 
 import UIKit
 
-//extension UIImageView {
-//    func load(url: URL) {
-//        DispatchQueue.global().async { [weak self] in
-//            if let data = try? Data(contentsOf: url) {
-//                if let image = UIImage(data: data) {
-//                    DispatchQueue.main.async {
-//                        self?.image = image
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
 extension Double {
     func rounded(toPlaces places:Int) -> Double {
         let divisor = pow(10.0, Double(places))
@@ -29,24 +15,8 @@ extension Double {
     }
 }
 
-//func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-//    URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
-//}
-//
-//func downloadImage(from url: URL) {
-//    print("Download Started")
-//    getData(from: url) { data, response, error in
-//        guard let data = data, error == nil else { return }
-//        print(response?.suggestedFilename ?? url.lastPathComponent)
-//        print("Download Finished")
-//        DispatchQueue.main.async() {
-//            self.imageView.image = UIImage(data: data)
-//        }
-//    }
-//}
-
 extension UIImageView {
-    func downloaded(from url: URL, contentMode mode: UIViewContentMode = .scaleAspectFit) {  // for swift 4.2 syntax just use ===> mode: UIView.ContentMode
+    func downloaded(from url: URL, contentMode mode: UIViewContentMode = .scaleAspectFit) {
         contentMode = mode
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard
@@ -60,21 +30,20 @@ extension UIImageView {
             }
             }.resume()
     }
-    func downloaded(from link: String, contentMode mode: UIViewContentMode = .scaleAspectFit) {  // for swift 4.2 syntax just use ===> mode: UIView.ContentMode
+    
+    func downloaded(from link: String, contentMode mode: UIViewContentMode = .scaleAspectFit) {  // for
         guard let url = URL(string: link) else { return }
         downloaded(from: url, contentMode: mode)
     }
 }
 
-class ViewController: UIViewController {
+class WeatherViewController: UIViewController {
 
     var currentPage:Int = 0
     var lastPage:Int = 0
     var weatherURL = URL(string: "https://www.metaweather.com/api/location/44418/")!
     var weatherData:([String:Any])? = nil
     var consolidatedWeatherList:[Any]? = nil
-    
-    @IBOutlet weak var CurrentDate: UITextView!
     
     @IBOutlet weak var WeatherType: UITextView!
     @IBOutlet weak var TempMin: UITextView!
@@ -93,7 +62,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getCurrentShortDate()
         PreviousButton.isEnabled = false
         NextButton.isEnabled = false
         load()
@@ -172,27 +140,30 @@ class ViewController: UIViewController {
         
         let urlString = "https://www.metaweather.com/static/img/weather/png/\(weatherDay!["weather_state_abbr"]!).png"
         print(urlString)
-//        Image.image = UIImage(named: "image")
-//        Image.load(url: url!)
         self.Image.downloaded(from: urlString)
     }
     
-    func getCurrentShortDate() -> Void {
-        let currentDate = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd-MM-yyyy"
-        CurrentDate.text = dateFormatter.string(from: currentDate as Date)
-    }
+
 }
 
-extension NSDate {
-    func dateFromString(date: String, format: String) -> NSDate {
-        let formatter = DateFormatter()
-        let locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        
-        formatter.locale = locale as Locale
-        formatter.dateFormat = format
-        
-        return formatter.date(from: date)! as NSDate
-    }
-}
+
+//extension NSDate {
+//    func dateFromString(date: String, format: String) -> NSDate {
+//        let formatter = DateFormatter()
+//        let locale = NSLocale(localeIdentifier: "en_US_POSIX")
+//
+//        formatter.locale = locale as Locale
+//        formatter.dateFormat = format
+//
+//        return formatter.date(from: date)! as NSDate
+//    }
+//}
+
+
+
+
+
+
+
+
+

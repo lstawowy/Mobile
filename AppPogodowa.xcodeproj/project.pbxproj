@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D115B1F237865FB009E1F68 /* CityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D115B1E237865FB009E1F68 /* CityViewController.swift */; };
 		AC9DAE8223583E1500CDB7FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DAE8123583E1500CDB7FB /* AppDelegate.swift */; };
-		AC9DAE8423583E1500CDB7FB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DAE8323583E1500CDB7FB /* ViewController.swift */; };
+		AC9DAE8423583E1500CDB7FB /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DAE8323583E1500CDB7FB /* WeatherViewController.swift */; };
 		AC9DAE8723583E1500CDB7FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC9DAE8523583E1500CDB7FB /* Main.storyboard */; };
 		AC9DAE8923583E1800CDB7FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC9DAE8823583E1800CDB7FB /* Assets.xcassets */; };
 		AC9DAE8C23583E1800CDB7FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC9DAE8A23583E1800CDB7FB /* LaunchScreen.storyboard */; };
 		AC9DAE9723583E1900CDB7FB /* AppPogodowaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DAE9623583E1900CDB7FB /* AppPogodowaTests.swift */; };
 		AC9DAEA223583E1900CDB7FB /* AppPogodowaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DAEA123583E1900CDB7FB /* AppPogodowaUITests.swift */; };
-		ACC8210A23617A0F0033478F /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC8210923617A0F0033478F /* Weather.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,9 +35,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D115B1E237865FB009E1F68 /* CityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityViewController.swift; sourceTree = "<group>"; };
 		AC9DAE7E23583E1500CDB7FB /* AppPogodowa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppPogodowa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC9DAE8123583E1500CDB7FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AC9DAE8323583E1500CDB7FB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AC9DAE8323583E1500CDB7FB /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		AC9DAE8623583E1500CDB7FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AC9DAE8823583E1800CDB7FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AC9DAE8B23583E1800CDB7FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -48,7 +49,6 @@
 		AC9DAE9D23583E1900CDB7FB /* AppPogodowaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppPogodowaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC9DAEA123583E1900CDB7FB /* AppPogodowaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPogodowaUITests.swift; sourceTree = "<group>"; };
 		AC9DAEA323583E1900CDB7FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ACC8210923617A0F0033478F /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		ACC8210C236183F10033478F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,12 +101,12 @@
 			isa = PBXGroup;
 			children = (
 				AC9DAE8123583E1500CDB7FB /* AppDelegate.swift */,
-				AC9DAE8323583E1500CDB7FB /* ViewController.swift */,
+				AC9DAE8323583E1500CDB7FB /* WeatherViewController.swift */,
 				AC9DAE8523583E1500CDB7FB /* Main.storyboard */,
 				AC9DAE8823583E1800CDB7FB /* Assets.xcassets */,
 				AC9DAE8A23583E1800CDB7FB /* LaunchScreen.storyboard */,
 				AC9DAE8D23583E1800CDB7FB /* Info.plist */,
-				ACC8210923617A0F0033478F /* Weather.swift */,
+				3D115B1E237865FB009E1F68 /* CityViewController.swift */,
 			);
 			path = AppPogodowa;
 			sourceTree = "<group>";
@@ -263,9 +263,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC9DAE8423583E1500CDB7FB /* ViewController.swift in Sources */,
-				ACC8210A23617A0F0033478F /* Weather.swift in Sources */,
+				AC9DAE8423583E1500CDB7FB /* WeatherViewController.swift in Sources */,
 				AC9DAE8223583E1500CDB7FB /* AppDelegate.swift in Sources */,
+				3D115B1F237865FB009E1F68 /* CityViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
