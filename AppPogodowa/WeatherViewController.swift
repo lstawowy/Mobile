@@ -39,6 +39,9 @@ extension UIImageView {
 
 class WeatherViewController: UIViewController {
 
+    var cityPressed = "London"
+    
+    @IBOutlet weak var cityName: UILabel!
     var currentPage:Int = 0
     var lastPage:Int = 0
     var weatherURL = URL(string: "https://www.metaweather.com/api/location/44418/")!
@@ -62,6 +65,7 @@ class WeatherViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.cityName.text = cityPressed
         PreviousButton.isEnabled = false
         NextButton.isEnabled = false
         load()
@@ -143,7 +147,43 @@ class WeatherViewController: UIViewController {
         self.Image.downloaded(from: urlString)
     }
     
-
+    static func getCurrentTemp(woeId: String) -> String {
+        var tempURL = URL(string: "https://www.metaweather.com/api/location/\(woeId)/")!
+        var result:String? = nil
+        let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: .main)
+        let task = session.dataTask(with: tempURL, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            do {
+                var weather = try JSONSerialization.jsonObject(with:data!) as? ([String : Any])
+                var consolidatedWeather = weather!["consolidated_weather"]! as? [Any]
+                let weatherDay = consolidatedWeather![0] as? ([String : Any])
+                result = "\(weatherDay!["the_temp"]!)"
+            } catch {
+                print("Serialization failed")
+            }
+        })
+        task.resume()
+        while(result == nil){}
+        return result!
+    }
+    
+    static func getCurrentWeatherType(woeId: String) -> String {
+        var tempURL = URL(string: "https://www.metaweather.com/api/location/\(woeId)/")!
+        var result:String? = nil
+        let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: .main)
+        let task = session.dataTask(with: tempURL, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            do {
+                var weather = try JSONSerialization.jsonObject(with:data!) as? ([String : Any])
+                var consolidatedWeather = weather!["consolidated_weather"]! as? [Any]
+                let weatherDay = consolidatedWeather![0] as? ([String : Any])
+                result = "\(weatherDay!["weather_state_abbr"]!)"
+            } catch {
+                print("Serialization failed")
+            }
+        })
+        task.resume()
+        while(result == nil){}
+        return result!
+    }
 }
 
 

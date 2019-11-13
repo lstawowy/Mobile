@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3D115B1F237865FB009E1F68 /* CityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D115B1E237865FB009E1F68 /* CityViewController.swift */; };
+		3D952345237CBF5400EEDA4F /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D952344237CBF5400EEDA4F /* SplitViewController.swift */; };
+		3DED71BF2378E6EA00E8B7C8 /* CitySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DED71BE2378E6EA00E8B7C8 /* CitySearchViewController.swift */; };
 		AC9DAE8223583E1500CDB7FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DAE8123583E1500CDB7FB /* AppDelegate.swift */; };
 		AC9DAE8423583E1500CDB7FB /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DAE8323583E1500CDB7FB /* WeatherViewController.swift */; };
 		AC9DAE8723583E1500CDB7FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC9DAE8523583E1500CDB7FB /* Main.storyboard */; };
@@ -36,6 +38,8 @@
 
 /* Begin PBXFileReference section */
 		3D115B1E237865FB009E1F68 /* CityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityViewController.swift; sourceTree = "<group>"; };
+		3D952344237CBF5400EEDA4F /* SplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
+		3DED71BE2378E6EA00E8B7C8 /* CitySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySearchViewController.swift; sourceTree = "<group>"; };
 		AC9DAE7E23583E1500CDB7FB /* AppPogodowa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppPogodowa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC9DAE8123583E1500CDB7FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AC9DAE8323583E1500CDB7FB /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +111,8 @@
 				AC9DAE8A23583E1800CDB7FB /* LaunchScreen.storyboard */,
 				AC9DAE8D23583E1800CDB7FB /* Info.plist */,
 				3D115B1E237865FB009E1F68 /* CityViewController.swift */,
+				3DED71BE2378E6EA00E8B7C8 /* CitySearchViewController.swift */,
+				3D952344237CBF5400EEDA4F /* SplitViewController.swift */,
 			);
 			path = AppPogodowa;
 			sourceTree = "<group>";
@@ -197,6 +203,7 @@
 				TargetAttributes = {
 					AC9DAE7D23583E1500CDB7FB = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 					AC9DAE9123583E1900CDB7FB = {
@@ -263,9 +270,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D952345237CBF5400EEDA4F /* SplitViewController.swift in Sources */,
 				AC9DAE8423583E1500CDB7FB /* WeatherViewController.swift in Sources */,
 				AC9DAE8223583E1500CDB7FB /* AppDelegate.swift in Sources */,
 				3D115B1F237865FB009E1F68 /* CityViewController.swift in Sources */,
+				3DED71BF2378E6EA00E8B7C8 /* CitySearchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,12 +450,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AppPogodowa/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = AGH.AppPogodowa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -456,6 +467,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AppPogodowa/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
