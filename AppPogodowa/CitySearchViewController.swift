@@ -11,6 +11,7 @@ import UIKit
 class CitySearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var CitySearchTableView: UITableView!
+    @IBOutlet weak var searchField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,9 +23,6 @@ class CitySearchViewController: UIViewController, UITableViewDelegate, UITableVi
     var cities = [City]()
     var searchURL = URL(string: "https://www.metaweather.com/api/location/search/?query=Moscow")!
     
-    @IBOutlet weak var searchField: UITextField!
-    @IBOutlet weak var searchTable: UITableView!
-    
     @IBAction func cancelButton() {
         dismiss(animated: true, completion: nil)
     }
@@ -32,21 +30,43 @@ class CitySearchViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBAction func searchButton(_ sender: Any) {
         self.load()
     }
-
+    
     func load() -> Void {
-        self.searchURL = URL(string: "https://www.metaweather.com/api/location/search/?query=\(self.searchField.text)")!
+        self.searchURL = URL(string: "https://www.metaweather.com/api/location/search/?query=\(self.searchField.text!)")!
         let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: .main)
         let task = session.dataTask(with: searchURL, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in do {
                 self.searchData = try JSONSerialization.jsonObject(with:data!) as? [Any]
                 while (self.searchData! == nil){}
                 for cityDict in self.searchData! {
                     if let dict = cityDict as? [String: Any] {
-                        var city = City(name: "", weId: "", temp: "", currentWeatherType: "")
-                        city.weId = "\(dict["woeid"]!)"
-                        city.name = "\(dict["title"]!)"
-                        city.temp = WeatherViewController.getCurrentTemp(woeId: city.weId)
-                        self.cities.append(city)
+                        let cityName = "\(dict["title"]!)"
+                        let woeId = "\(dict["woeid"]!)"
+                        self.addCity(cityName: cityName, woeId: woeId)
                     }
+                }
+            } catch {
+                print("Serialization failed")
+            }
+        })
+        task.resume()
+    }
+    
+    func addCity(cityName: String,woeId: String) -> Void {
+        var tempURL = URL(string: "https://www.metaweather.com/api/location/\(woeId)/")!
+        let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: .main)
+        let task = session.dataTask(with: tempURL, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            do {
+                var weather = try JSONSerialization.jsonObject(with:data!) as? ([String : Any])
+                if (weather == nil) {
+                    
+                } else {
+                    var consolidatedWeather = weather!["consolidated_weather"]! as? [Any]
+                    let weatherDay = consolidatedWeather![0] as? ([String : Any])
+                    let temperature = "\(weatherDay!["the_temp"]!)"
+                    let weatherState = "\(weatherDay!["weather_state_abbr"]!)"
+                    let city = City(name: cityName, weId: woeId, temp: temperature, currentWeatherType: weatherState)
+                    self.cities += [city]
+                    self.CitySearchTableView.reloadData()
                 }
             } catch {
                 print("Serialization failed")
@@ -64,8 +84,8 @@ class CitySearchViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellIdentifier = "SearchCellId"
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CityTableViewCell  else {
+        let cellIdentifier = "SearchCityCell"
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? SearchTableViewCell  else {
             fatalError("The dequeued cell is not an instance of SearchCellId.")
         }
         

@@ -25,7 +25,8 @@ class CityTableViewController: UITableViewController {
     var cities = [City]()
     
     @IBOutlet weak var CurrentDate: UILabel!
-
+    @IBOutlet var CityTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getCurrentShortDate()
@@ -68,10 +69,33 @@ class CityTableViewController: UITableViewController {
     }
     
     private func loadSampleCities() {
-        let city1 = City(name: "Warsaw", weId: "523920", temp: "5", currentWeatherType: "hr")
-        let city2 = City(name: "London", weId: "44418", temp: "6", currentWeatherType: "hr")
-        let city3 = City(name: "Moscow", weId: "2122265", temp: "7", currentWeatherType: "hr")
-        cities += [city1, city2, city3]
+        addCity(cityName: "Warsaw", woeId: "523920")
+        addCity(cityName: "London", woeId: "44418")
+        addCity(cityName: "Moscow", woeId: "2122265")
+    }
+    
+    func addCity(cityName: String,woeId: String) -> Void {
+        var tempURL = URL(string: "https://www.metaweather.com/api/location/\(woeId)/")!
+        let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: .main)
+        let task = session.dataTask(with: tempURL, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            do {
+                var weather = try JSONSerialization.jsonObject(with:data!) as? ([String : Any])
+                if (weather == nil) {
+                    
+                } else {
+                    var consolidatedWeather = weather!["consolidated_weather"]! as? [Any]
+                    let weatherDay = consolidatedWeather![0] as? ([String : Any])
+                    var temperature = "\(weatherDay!["the_temp"]!)"
+                    var weatherState = "\(weatherDay!["weather_state_abbr"]!)"
+                    let city = City(name: cityName, weId: woeId, temp: temperature, currentWeatherType: weatherState)
+                    self.cities += [city]
+                    self.CityTableView.reloadData()
+                }
+            } catch {
+                print("Serialization failed")
+            }
+        })
+        task.resume()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
@@ -86,6 +110,7 @@ class CityTableViewController: UITableViewController {
             let cityCell = sender.unsafelyUnwrapped as! SearchTableViewCell
             let city = City(name: cityCell.CityName.text!, weId: cityCell.woeId!, temp: cityCell.Temperature.text!, currentWeatherType: cityCell.weatherType)
             cityController.cities.append(city)
+            cityController.CityTableView.reloadData()
         }
     }
     

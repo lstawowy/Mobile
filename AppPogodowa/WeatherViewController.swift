@@ -109,11 +109,14 @@ class WeatherViewController: UIViewController {
         let task = session.dataTask(with: weatherURL, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             do {
                 self.weatherData = try JSONSerialization.jsonObject(with:data!) as? ([String : Any])
-                self.consolidatedWeatherList = self.weatherData!["consolidated_weather"]! as? [Any]
-                self.lastPage = (self.consolidatedWeatherList?.count)!-1
-                self.LastPage.text = "\(self.lastPage)"
-                self.updateFields()
-                self.checkButtons()
+                if (self.weatherData == nil){}
+                else {
+                    self.consolidatedWeatherList = self.weatherData!["consolidated_weather"]! as? [Any]
+                    self.lastPage = (self.consolidatedWeatherList?.count)!-1
+                    self.LastPage.text = "\(self.lastPage)"
+                    self.updateFields()
+                    self.checkButtons()
+                }
             } catch {
                 print("Serialization failed")
             }
@@ -146,64 +149,4 @@ class WeatherViewController: UIViewController {
         print(urlString)
         self.Image.downloaded(from: urlString)
     }
-    
-    static func getCurrentTemp(woeId: String) -> String {
-        var tempURL = URL(string: "https://www.metaweather.com/api/location/\(woeId)/")!
-        var result:String? = nil
-        let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: .main)
-        let task = session.dataTask(with: tempURL, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            do {
-                var weather = try JSONSerialization.jsonObject(with:data!) as? ([String : Any])
-                var consolidatedWeather = weather!["consolidated_weather"]! as? [Any]
-                let weatherDay = consolidatedWeather![0] as? ([String : Any])
-                result = "\(weatherDay!["the_temp"]!)"
-            } catch {
-                print("Serialization failed")
-            }
-        })
-        task.resume()
-        while(result == nil){}
-        return result!
-    }
-    
-    static func getCurrentWeatherType(woeId: String) -> String {
-        var tempURL = URL(string: "https://www.metaweather.com/api/location/\(woeId)/")!
-        var result:String? = nil
-        let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: .main)
-        let task = session.dataTask(with: tempURL, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            do {
-                var weather = try JSONSerialization.jsonObject(with:data!) as? ([String : Any])
-                var consolidatedWeather = weather!["consolidated_weather"]! as? [Any]
-                let weatherDay = consolidatedWeather![0] as? ([String : Any])
-                result = "\(weatherDay!["weather_state_abbr"]!)"
-            } catch {
-                print("Serialization failed")
-            }
-        })
-        task.resume()
-        while(result == nil){}
-        return result!
-    }
 }
-
-
-//extension NSDate {
-//    func dateFromString(date: String, format: String) -> NSDate {
-//        let formatter = DateFormatter()
-//        let locale = NSLocale(localeIdentifier: "en_US_POSIX")
-//
-//        formatter.locale = locale as Locale
-//        formatter.dateFormat = format
-//
-//        return formatter.date(from: date)! as NSDate
-//    }
-//}
-
-
-
-
-
-
-
-
-
