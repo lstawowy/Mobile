@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MapKit
+import CoreLocation
 
 extension Double {
     func rounded(toPlaces places:Int) -> Double {
@@ -40,13 +42,19 @@ extension UIImageView {
 class WeatherViewController: UIViewController {
 
     var cityPressed = "London"
+    let regionRadius: CLLocationDistance = 100000
     
-    @IBOutlet weak var cityName: UILabel!
+    var lattitude: Double = 1.1
+    var longitude: Double = 1.1
+    var initialLocation = CLLocation(latitude: 21.282778, longitude: -157.829444)
+    
     var currentPage:Int = 0
     var lastPage:Int = 0
     var weatherURL = URL(string: "https://www.metaweather.com/api/location/44418/")!
     var weatherData:([String:Any])? = nil
     var consolidatedWeatherList:[Any]? = nil
+    
+    @IBOutlet weak var cityName: UILabel!
     
     @IBOutlet weak var WeatherType: UITextView!
     @IBOutlet weak var TempMin: UITextView!
@@ -62,15 +70,28 @@ class WeatherViewController: UIViewController {
     
     @IBOutlet weak var CurrentPage: UITextView!
     @IBOutlet weak var LastPage: UITextView!
+    @IBOutlet weak var MapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.cityName.text = cityPressed
-        PreviousButton.isEnabled = false
-        NextButton.isEnabled = false
+        self.PreviousButton.isEnabled = false
+        self.NextButton.isEnabled = false
         load()
+        centerMapOnLocation(location: self.initialLocation)
         self.CurrentPage.text = "\(self.currentPage)"
         self.LastPage.text = "\(self.lastPage)"
+    }
+    
+    func centerMapOnLocation(location: CLLocation) {
+        initialLocation = CLLocation(latitude: self.lattitude, longitude: self.longitude)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
+                                                                  regionRadius, regionRadius)
+        MapView.setRegion(coordinateRegion, animated: true)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = CLLocationCoordinate2D(latitude: self.lattitude, longitude: self.longitude)
+        MapView.addAnnotation(annotation)
     }
     
     func checkButtons() -> Void {
@@ -109,8 +130,9 @@ class WeatherViewController: UIViewController {
         let task = session.dataTask(with: weatherURL, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             do {
                 self.weatherData = try JSONSerialization.jsonObject(with:data!) as? ([String : Any])
-                if (self.weatherData == nil){}
-                else {
+                if (self.weatherData == nil){
+                    
+                } else {
                     self.consolidatedWeatherList = self.weatherData!["consolidated_weather"]! as? [Any]
                     self.lastPage = (self.consolidatedWeatherList?.count)!-1
                     self.LastPage.text = "\(self.lastPage)"
@@ -131,19 +153,19 @@ class WeatherViewController: UIViewController {
         WeatherType.text=weatherDay!["weather_state_name"]! as! String
         
         let min_temp = weatherDay!["min_temp"]! as! Double
-        TempMin.text="\(min_temp.rounded(toPlaces: 3))"
+        TempMin.text="\(min_temp.rounded(toPlaces: 3)) °C"
         
         let max_temp = weatherDay!["max_temp"]! as! Double
-        TempMax.text="\(max_temp.rounded(toPlaces: 3))"
+        TempMax.text="\(max_temp.rounded(toPlaces: 3)) °C"
 
-        WindDirection.text=weatherDay!["wind_direction_compass"]! as! String
+        WindDirection.text="\(weatherDay!["wind_direction_compass"]!)"
         
         let wind_speed = weatherDay!["wind_speed"]! as! Double
-        WindSpeed.text="\(wind_speed.rounded(toPlaces: 3))"
+        WindSpeed.text="\(wind_speed.rounded(toPlaces: 3)) km/h"
         
-        Precipitation.text="\(weatherDay!["humidity"]!)"
+        Precipitation.text="\(weatherDay!["humidity"]!) %"
         
-        Pressure.text="\(weatherDay!["air_pressure"]!)"
+        Pressure.text="\(weatherDay!["air_pressure"]!) hPa"
         
         let urlString = "https://www.metaweather.com/static/img/weather/png/\(weatherDay!["weather_state_abbr"]!).png"
         print(urlString)

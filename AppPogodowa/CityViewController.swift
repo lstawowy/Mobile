@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import CoreLocation
 
 class CityTableViewCell: UITableViewCell {
     var woeId: String!
     var weatherType: String!
+    var latt_long: String!
     
     @IBOutlet weak var CellImage: UIImageView!
     @IBOutlet weak var CityName: UILabel!
@@ -62,8 +64,8 @@ class CityTableViewController: UITableViewController {
         
         let urlString = "https://www.metaweather.com/static/img/weather/png/\(city.currentWeatherType).png"
         cell.CellImage.downloaded(from: urlString)
-
-        cell.Temperature.text = city.temp
+        cell.Temperature.text = city.temp + " °C"
+        cell.latt_long = city.lattitude_longitude
         
         return cell
     }
@@ -75,7 +77,7 @@ class CityTableViewController: UITableViewController {
     }
     
     func addCity(cityName: String,woeId: String) -> Void {
-        var tempURL = URL(string: "https://www.metaweather.com/api/location/\(woeId)/")!
+        let tempURL = URL(string: "https://www.metaweather.com/api/location/\(woeId)/")!
         let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: .main)
         let task = session.dataTask(with: tempURL, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             do {
@@ -83,11 +85,12 @@ class CityTableViewController: UITableViewController {
                 if (weather == nil) {
                     
                 } else {
+                    var latt_long = weather!["latt_long"]! as? String
                     var consolidatedWeather = weather!["consolidated_weather"]! as? [Any]
                     let weatherDay = consolidatedWeather![0] as? ([String : Any])
-                    var temperature = "\(weatherDay!["the_temp"]!)"
-                    var weatherState = "\(weatherDay!["weather_state_abbr"]!)"
-                    let city = City(name: cityName, weId: woeId, temp: temperature, currentWeatherType: weatherState)
+                    let temperature = "\(weatherDay!["the_temp"]!)"
+                    let weatherState = "\(weatherDay!["weather_state_abbr"]!)"
+                    let city = City(name: cityName, weId: woeId, temp: temperature, currentWeatherType: weatherState, lattitude_longitude: latt_long!)
                     self.cities += [city]
                     self.CityTableView.reloadData()
                 }
@@ -100,17 +103,16 @@ class CityTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         if (segue.identifier == "cityChooseSegue") {
-            var viewController = segue.destination as! WeatherViewController
+            let viewController = segue.destination as! WeatherViewController
             let cityCell = sender.unsafelyUnwrapped as! CityTableViewCell
             viewController.cityPressed = cityCell.CityName.text!
             viewController.weatherURL = URL(string: "https://www.metaweather.com/api/location/\(cityCell.woeId!)/")!
-        }
-        if (segue.identifier == "cityAddSegue") {
-            var cityController = segue.destination as! CityTableViewController
-            let cityCell = sender.unsafelyUnwrapped as! SearchTableViewCell
-            let city = City(name: cityCell.CityName.text!, weId: cityCell.woeId!, temp: cityCell.Temperature.text!, currentWeatherType: cityCell.weatherType)
-            cityController.cities.append(city)
-            cityController.CityTableView.reloadData()
+            var coordinates = cityCell.latt_long.characters.split{$0 == ","}.map(String.init)
+            var lattitude = Double(coordinates[0])
+            var longitude = Double(coordinates[1])
+            viewController.lattitude = lattitude!
+            viewController.longitude = longitude!
+            viewController.initialLocation = CLLocation(latitude: lattitude!, longitude: longitude!)
         }
     }
     
@@ -121,4 +123,5 @@ struct City {
     var weId = ""
     var temp = ""
     var currentWeatherType = ""
+    var lattitude_longitude = ""
 }
